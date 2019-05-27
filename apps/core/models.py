@@ -20,6 +20,7 @@ class Platform(models.Model):
 
 class Driver(models.Model):
     name = models.CharField(max_length=90, null=True, blank=True)
+    placa = models.CharField(max_length=10, null=True, blank=True)
     reputation = models.ForeignKey(Reputation, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
@@ -37,8 +38,9 @@ class ItemPlatform(models.Model):
 
 
 class Report(models.Model):
-    descr = models.CharField(max_length=90, null=True, blank=True)
-    date = models.DateField()
+    descr = models.TextField(null=True, blank=True)
+    created = models.DateField(auto_now_add=True)
+    changed = models.DateField(auto_now=True)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True)
     aproved = models.BooleanField(default=True)
 
