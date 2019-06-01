@@ -12,38 +12,34 @@ from apps.core.serializers import ReputationSerializer, PlatformSerializer, Repo
 class ReputationView(viewsets.ModelViewSet):
     queryset = Reputation.objects.all()
     serializer_class = ReputationSerializer
-    permission_classes = (IsAuthenticated, )
 
 
 class PlatformView(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
-    permission_classes = (IsAuthenticated, )
 
 
 class ItemPlatformView(viewsets.ModelViewSet):
     queryset = ItemPlatform.objects.all()
     serializer_class = ItemPlatformSerializer
-    permission_classes = (IsAuthenticated,)
 
 
 class DriverView(viewsets.ModelViewSet):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    permission_classes = (IsAuthenticated, )
 
 
 class ReportView(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         return self.queryset
 
     def create(self, request):
+        pdb.set_trace()
         driver, created = Driver.objects.get_or_create(
-            name=request.data['name_driver'].upper(), placa=request.data['placa'].upper()
+            name=request.data['name driver'].upper(), placa=request.data['placa'].upper()
         )
 
         report = Report.objects.create(descr=request.data['descr'], driver=driver)
@@ -55,4 +51,3 @@ class ReportView(viewsets.ModelViewSet):
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, )

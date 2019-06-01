@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from apps.core.views import ReportView, CommentView, DriverView, ReputationView
+from apps.core.views import ReportView, CommentView, DriverView, ReputationView, PlatformView
 
 router = routers.DefaultRouter()
-router.register(r'denunciar', ReportView)
-router.register(r'comentar', CommentView)
+router.register(r'reclamacao', ReportView)
 router.register(r'motorista', DriverView)
+router.register(r'app', PlatformView)
+router.register(r'comentario', CommentView)
 router.register(r'reputacao', ReputationView)
 
 urlpatterns = router.urls
