@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import django_heroku
 from decouple import config
 from django.conf.global_settings import DATABASES
 from unipath import Path
@@ -29,7 +30,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['localhost', ]
+ALLOWED_HOSTS = ['reclametaxi.herokuapp.com', 'localhost', ]
 
 
 # Application definition
@@ -88,7 +89,6 @@ WSGI_APPLICATION = 'system.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES['default'] = config('DATABASE_URL', cast=db_url)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -164,3 +164,8 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
             'INTERCEPT_REDIRECTS': False,
         }
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Configure Django App for Heroku.
+django_heroku.settings(locals())
