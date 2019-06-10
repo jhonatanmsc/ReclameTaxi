@@ -34,10 +34,12 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    nome = models.CharField(u'nome', max_length=100, null=True, blank=True)
+    uid = models.CharField(u'UID', max_length=255, null=True, blank=True)
+    photo = models.CharField(u'Url foto de perfil')  # photoURL
+    provider = models.CharField(u'provider', max_length=255, null=True, blank=True)  # providerID
+    nome = models.CharField(u'nome', max_length=100, null=True, blank=True)  # displayName
     email = models.EmailField(u'email', max_length=255, null=True, unique=True)
-    telefone = models.CharField('numero de telefone', max_length=30, null=True, blank=True)
-    data_nasc = models.DateField(null=True, blank=True)
+    telefone = models.CharField('numero de telefone', max_length=30, null=True, blank=True)  # phoneNumber
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
