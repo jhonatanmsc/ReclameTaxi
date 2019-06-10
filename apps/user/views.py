@@ -1,4 +1,4 @@
-import pdb
+import pdb, sys
 
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
@@ -12,6 +12,7 @@ from apps.user.serializers import UserSerializer
 @api_view(["POST"])
 def AuthLogin(request):
     userJSON = request.data
+    print(userJSON)
     user, created = User.objects.get_or_create(
         uid=userJSON['uid'],
         photoURL=userJSON['photoURL'],
@@ -20,7 +21,7 @@ def AuthLogin(request):
         email=userJSON['email'],
         phoneNumber=userJSON['phoneNumber']
     )
-    print(userJSON)
+    sys.stdout.write(userJSON)
 
     user.set_password('Informatica')
     user.save()
