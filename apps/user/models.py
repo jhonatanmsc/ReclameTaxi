@@ -7,24 +7,24 @@ from django.contrib.auth.models import (
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, nome, password=None):
+    def create_user(self, email, displayName, password=None):
         if not email:
             raise ValueError('Usuarios devem ter emails validos!')
 
         user = self.model(
             email=self.normalize_email(email),
-            nome=nome,
+            nome=displayName,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, nome, password):
+    def create_superuser(self, email, displayName, password):
         user = self.create_user(
             email=email,
             password=password,
-            nome=nome,
+            nome=displayName,
         )
         user.is_admin = True
         user.is_superuser = True
@@ -54,11 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Usuários'
 
     def __str__(self):
-        return self.nome
+        return self.displayName
 
     def save(self, *args, **kwargs):
         super(User, self).save()
 
     @property
     def first_name(self):
-        return self.nome.split(' ')[0]
+        return self.displayName.split(' ')[0]
