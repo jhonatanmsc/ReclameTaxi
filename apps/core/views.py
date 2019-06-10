@@ -37,12 +37,12 @@ class ReportView(viewsets.ModelViewSet):
         return self.queryset
 
     def create(self, request):
-        pdb.set_trace()
+        uid = None if not request.user else request.user.uid
         driver, created = Driver.objects.get_or_create(
             name=request.data['name driver'].upper(), placa=request.data['placa'].upper()
         )
 
-        report = Report.objects.create(descr=request.data['descr'], driver=driver)
+        report = Report.objects.create(uid=uid, descr=request.data['descr'], driver=driver)
 
         headers = self.get_success_headers(request.data)
         return Response({'Message': 'Reclamação registrada.'}, status=status.HTTP_201_CREATED, headers=headers)
@@ -51,3 +51,16 @@ class ReportView(viewsets.ModelViewSet):
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return self.queryset
+
+    def create(self, request):
+        responseJSON = request.data['body']
+        uid = None if not request.user else request.user.uid
+        report = Report.objects.get(id=responseJSON['reportId'])
+
+        comment = Comment.objects.create(uid=uid, descr=responseJSON['descr'], report=report)
+
+        headers = self.get_success_headers(request.data)
+        return Response({'Message': 'Comentário registrado.'}, status=status.HTTP_201_CREATED, headers=headers)

@@ -12,10 +12,15 @@ class Reputation(models.Model):
 
 class Platform(models.Model):
     name = models.CharField(max_length=90, null=True, blank=True)
+    color = models.CharField(u'cor', max_length=20, null=True, blank=True)
+    icon = models.ImageField(u'ícone', upload_to='apps', max_length=254, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Aplicativo'
         verbose_name_plural = 'Aplicativos'
+
+    def __str__(self):
+        return self.name
 
 
 class Driver(models.Model):
@@ -38,6 +43,7 @@ class ItemPlatform(models.Model):
 
 
 class Report(models.Model):
+    uid = models.CharField(max_length=255, null=True, blank=True)
     descr = models.TextField(null=True, blank=True)
     created = models.DateField(auto_now_add=True)
     changed = models.DateField(auto_now=True)
@@ -50,6 +56,7 @@ class Report(models.Model):
 
 
 class Comment(models.Model):
+    uid = models.CharField(max_length=255, null=True, blank=True)
     descr = models.CharField(max_length=90, null=True, blank=True)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
 
