@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('rest_framework.urls')),
     path('', include(core_urls)),
-    path('', include(user_urls)),
+    path('user/', include(user_urls)),
 ]
 
 if settings.DEBUG:
