@@ -30,7 +30,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['reclametaxi.herokuapp.com', 'localhost', ]
+ALLOWED_HOSTS = ['reclametaxi.herokuapp.com', 'localhost', '172.20.10.3']
 
 
 # Application definition
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'rest_framework',
     'corsheaders',
 
@@ -55,10 +54,10 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'user.User'
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -66,6 +65,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'system.urls'
 
@@ -147,26 +148,6 @@ MEDIA_ROOT = BASE_DIR.child('media')
 
 # favor nao apagar esta linha!!
 STATICFILES_DIRS = [os.path.join('static')]
-
-if DEBUG:
-    DEBUG_TOOLBAR_PANELS = [
-            'debug_toolbar.panels.versions.VersionsPanel',
-            'debug_toolbar.panels.timer.TimerPanel',
-            'debug_toolbar.panels.settings.SettingsPanel',
-            'debug_toolbar.panels.headers.HeadersPanel',
-            'debug_toolbar.panels.request.RequestPanel',
-            'debug_toolbar.panels.sql.SQLPanel',
-            'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-            'debug_toolbar.panels.templates.TemplatesPanel',
-            'debug_toolbar.panels.cache.CachePanel',
-            'debug_toolbar.panels.signals.SignalsPanel',
-            'debug_toolbar.panels.logging.LoggingPanel',
-            'debug_toolbar.panels.redirects.RedirectsPanel',
-        ]
-
-    DEBUG_TOOLBAR_CONFIG = {
-            'INTERCEPT_REDIRECTS': False,
-        }
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
