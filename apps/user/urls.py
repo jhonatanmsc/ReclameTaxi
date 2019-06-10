@@ -12,24 +12,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.contrib import admin
 from django.urls import path, include
 
-from apps.core.urls import urlpatterns as core_urls
-from apps.user.urls import urlpatterns as user_urls
+from apps.user.views import AuthLogin
 
 urlpatterns = [
-    path('jet/', include('jet.urls', 'jet')),
-    path('admin/', admin.site.urls),
-    path('', include('rest_framework.urls')),
-    path('', include(core_urls)),
-    path('', include(user_urls)),
+    path('login', AuthLogin, name='auth-login')
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-
-    ] + urlpatterns
