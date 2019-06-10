@@ -21,7 +21,6 @@ def AuthLogin(request):
         email=userJSON['email'],
         phoneNumber=userJSON['phoneNumber']
     )
-    sys.stdout.write(userJSON)
 
     user.set_password('Informatica')
     user.save()
