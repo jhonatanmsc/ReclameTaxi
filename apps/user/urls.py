@@ -17,5 +17,5 @@ from django.urls import path, include
 from apps.user.views import AuthLogin
 
 urlpatterns = [
-    path('api/login', AuthLogin, name='auth-login')
+    path('/login', AuthLogin, name='auth-login')
 ]
