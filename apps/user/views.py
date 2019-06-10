@@ -11,7 +11,7 @@ from apps.user.serializers import UserSerializer
 
 @api_view(["POST"])
 def AuthLogin(request):
-    userJSON = request.data
+    userJSON = request.data['body']
     print(userJSON)
     user, created = User.objects.get_or_create(
         uid=userJSON['uid'],
