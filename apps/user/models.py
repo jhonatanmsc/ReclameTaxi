@@ -13,7 +13,7 @@ class CustomUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            nome=displayName,
+            displayName=displayName,
         )
 
         user.set_password(password)
@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(
             email=email,
             password=password,
-            nome=displayName,
+            displayName=displayName,
         )
         user.is_admin = True
         user.is_superuser = True
