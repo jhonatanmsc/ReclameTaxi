@@ -20,6 +20,7 @@ def AuthLogin(request):
         email=userJSON['email'],
         phoneNumber=userJSON['phoneNumber']
     )
+    print(userJSON)
 
     user.set_password('Informatica')
     user.save()
