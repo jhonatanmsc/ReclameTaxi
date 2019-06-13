@@ -13,7 +13,7 @@ class Reputation(models.Model):
 class Platform(models.Model):
     name = models.CharField(max_length=90, null=True, blank=True)
     color = models.CharField(u'cor', max_length=20, null=True, blank=True)
-    icon = models.ImageField(u'ícone', upload_to='apps', max_length=254, null=True, blank=True)
+    icon = models.CharField(u'ícone', max_length=254, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Aplicativo'
