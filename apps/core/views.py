@@ -1,7 +1,6 @@
 import pdb
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.models import Reputation, Platform, Driver, Report, Comment, ItemPlatform
@@ -33,13 +32,10 @@ class ReportView(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
-    def get_queryset(self):
-        return self.queryset
-
     def create(self, request):
         uid = None if not request.user else request.user.uid
         driver, created = Driver.objects.get_or_create(
-            name=request.data['name driver'].upper(), placa=request.data['placa'].upper()
+            name=request.data['name_driver'].upper(), placa=request.data['placa'].upper()
         )
 
         report = Report.objects.create(uid=uid, descr=request.data['descr'], driver=driver)
@@ -51,9 +47,6 @@ class ReportView(viewsets.ModelViewSet):
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        return self.queryset
 
     def create(self, request):
         responseJSON = request.data['body']
