@@ -1,5 +1,6 @@
-import pdb
+import pdb, sys
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -34,14 +35,32 @@ class ReportView(viewsets.ModelViewSet):
 
     def create(self, request):
         uid = None if not request.user else request.user.uid
-        driver, created = Driver.objects.get_or_create(
-            name=request.data['name_driver'].upper(), placa=request.data['placa'].upper()
-        )
+        app = ''
+        try:
+            app = Platform.objects.get(name=request.data['app'].upper())
+            driver, driver_created = Driver.objects.get_or_create(
+                name=request.data['name_driver'].upper(),
+                placa=request.data['placa'].upper(),
+            )
+            item, item_created = ItemPlatform.objects.get_or_create(
+                platform=app,
+                driver=driver
+            )
+            report = Report.objects.create(uid=uid, descr=request.data['descr'], driver=driver)
+            headers = self.get_success_headers(request.data)
+            return Response(
+                {'Message': 'Reclamação registrada.'},
+                status=status.HTTP_201_CREATED,
+                headers=headers
+            )
+        except ObjectDoesNotExist:
+            # pdb.set_trace()
+            sys.stderr.write(f'App {request.data["app"]} não encontrado')
+            return Response(
+                {'Message': f'App {request.data["app"]} não encontrado'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
-        report = Report.objects.create(uid=uid, descr=request.data['descr'], driver=driver)
-
-        headers = self.get_success_headers(request.data)
-        return Response({'Message': 'Reclamação registrada.'}, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CommentView(viewsets.ModelViewSet):
