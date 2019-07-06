@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES['default'] = config('DEV_DATABASE_URL', cast=db_url)
+DATABASES['default'] = config('DATABASE_URL', cast=db_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
