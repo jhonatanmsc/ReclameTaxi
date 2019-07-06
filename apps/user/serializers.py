@@ -7,4 +7,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['is_admin', 'is_active', 'is_staff']
+        fields = ['url', 'uid', 'displayName', 'email', 'phoneNumber', 'photoURL', 'providerID']

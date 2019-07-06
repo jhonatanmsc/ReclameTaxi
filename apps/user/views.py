@@ -2,9 +2,9 @@ import pdb, sys
 
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from apps.user.models import User
 from apps.user.serializers import UserSerializer
 
@@ -28,3 +28,7 @@ def AuthLogin(request):
     responseJSON = UserSerializer(user)
     return Response({'uid': userJSON['uid']}, status='200')
 
+
+class UserView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

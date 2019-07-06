@@ -8,7 +8,7 @@ from apps.core.serializers import ReputationSerializer, PlatformSerializer, Repo
     DriverSerializer, ItemPlatformSerializer
 
 
-class ReputationView(viewsets.ModelViewSet):
+class ReputationView(viewsets.ReadOnlyModelViewSet):
     queryset = Reputation.objects.all()
     serializer_class = ReputationSerializer
 
