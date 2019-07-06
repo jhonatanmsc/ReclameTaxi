@@ -34,8 +34,8 @@ class Driver(models.Model):
 
 
 class ItemPlatform(models.Model):
-    platform = models.ForeignKey(Platform, on_delete=models.CASCADE, null=True, blank=True)
-    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True)
+    platform = models.ForeignKey(Platform, on_delete=models.CASCADE, null=True, blank=True, related_name='drivers')
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True, related_name='apps')
 
     class Meta:
         verbose_name = 'aplicativo / motorista'
