@@ -33,8 +33,24 @@ class ReportView(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
+    def list(self, request, *args, **kwargs):
+        page = self.paginate_queryset(self.queryset)
+        uid = request.query_params.get('uid')
+
+        if uid:
+            report_list = Report.objects.filter(uid=uid)
+        else:
+            report_list = self.queryset
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(report_list, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
-        uid = None if not request.user else request.user.uid
+        uid = request.data['uid'] if request.user.is_anonymous else request.user.uid
         app = ''
         try:
             app = Platform.objects.get(name=request.data['app'].upper())
@@ -55,12 +71,11 @@ class ReportView(viewsets.ModelViewSet):
             )
         except ObjectDoesNotExist:
             # pdb.set_trace()
-            sys.stderr.write(f'App {request.data["app"]} não encontrado')
+            sys.stderr.write(f'App {request.data["app"]} não encontrado\n')
             return Response(
                 {'Message': f'App {request.data["app"]} não encontrado'},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
 
 
 class CommentView(viewsets.ModelViewSet):
@@ -69,7 +84,7 @@ class CommentView(viewsets.ModelViewSet):
 
     def create(self, request):
         responseJSON = request.data['body']
-        uid = None if not request.user else request.user.uid
+        uid = request.data['uid'] if not request.user else request.user.uid
         report = Report.objects.get(id=responseJSON['reportId'])
 
         comment = Comment.objects.create(uid=uid, descr=responseJSON['descr'], report=report)
