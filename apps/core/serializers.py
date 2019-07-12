@@ -57,10 +57,15 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     name_driver = serializers.CharField(max_length=90, required=False)
     placa = serializers.CharField(max_length=10, required=False)
     app = serializers.CharField(max_length=20, required=False)
+    driver = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
         fields = '__all__'
+
+    def get_driver(self, instance):
+        dump_driver = { "name": instance.driver.name, "placa": instance.driver.placa }
+        return dump_driver
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
