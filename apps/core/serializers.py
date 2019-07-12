@@ -7,10 +7,25 @@ from apps.core.models import Driver, Platform, ItemPlatform, Report, Comment
 
 
 class PlatformSerializer(serializers.HyperlinkedModelSerializer):
+    reputation = serializers.SerializerMethodField()
 
     class Meta:
         model = Platform
         fields = '__all__'
+
+    def get_reputation(self, instace):
+        qtd_reports = Report.objects.filter(Q(driver__apps__platform__name=instace.name)).count()
+        if qtd_reports > 0:
+            reclamations = Report.objects.filter(
+                Q(resolved=True) &
+                Q(driver__apps__platform__name=instace.name))\
+                .count()
+            if not reclamations:
+                return 0
+            score = qtd_reports / reclamations
+            return score
+
+        return 1
 
 
 class DriverSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,7 +55,7 @@ class DriverSerializer(serializers.HyperlinkedModelSerializer):
             reclamations = Report.objects.filter(Q(resolved=True) & Q(driver=instace)).count()
             if not reclamations:
                 return 0
-            score = reclamations / qtd_reports
+            score = qtd_reports / reclamations
             return score
 
         return 1
