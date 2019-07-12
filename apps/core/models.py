@@ -39,6 +39,7 @@ class Report(models.Model):
     changed = models.DateField(auto_now=True)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True, related_name="reports")
     aproved = models.BooleanField(default=True)
+    resolved = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Reclamação'
@@ -50,7 +51,6 @@ class Comment(models.Model):
     descr = models.CharField(max_length=90, null=True, blank=True)
     created = models.DateField(auto_now_add=True)
     changed = models.DateField(auto_now=True)
-    resolved = models.BooleanField(default=False)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
