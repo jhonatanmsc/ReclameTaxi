@@ -64,7 +64,16 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
     def get_driver(self, instance):
-        dump_driver = { "name": instance.driver.name, "placa": instance.driver.placa }
+        item_apps = instance.driver.apps.all()
+        apps = []
+        for app in item_apps:
+            serialized = PlatformSerializer(app.platform, context={'request': self.context['request']})
+            apps.append(serialized.data)
+        dump_driver = {
+            "name": instance.driver.name,
+            "placa": instance.driver.placa,
+            "apps": apps
+        }
         return dump_driver
 
 
