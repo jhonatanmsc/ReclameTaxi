@@ -1,15 +1,6 @@
 from django.db import models
 
 
-class Reputation(models.Model):
-    descr = models.CharField(max_length=90, null=True, blank=True)
-    score = models.IntegerField(default=0)
-
-    class Meta:
-        verbose_name = 'Reputação'
-        verbose_name_plural = 'Reputações'
-
-
 class Platform(models.Model):
     name = models.CharField(max_length=90, null=True, blank=True)
     color = models.CharField(u'cor', max_length=20, null=True, blank=True)
@@ -26,7 +17,6 @@ class Platform(models.Model):
 class Driver(models.Model):
     name = models.CharField(max_length=90, null=True, blank=True)
     placa = models.CharField(max_length=10, null=True, blank=True)
-    reputation = models.ForeignKey(Reputation, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Motorista'
@@ -47,7 +37,7 @@ class Report(models.Model):
     descr = models.TextField(null=True, blank=True)
     created = models.DateField(auto_now_add=True)
     changed = models.DateField(auto_now=True)
-    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True, related_name="reports")
     aproved = models.BooleanField(default=True)
 
     class Meta:
@@ -58,6 +48,9 @@ class Report(models.Model):
 class Comment(models.Model):
     uid = models.CharField(max_length=255, null=True, blank=True)
     descr = models.CharField(max_length=90, null=True, blank=True)
+    created = models.DateField(auto_now_add=True)
+    changed = models.DateField(auto_now=True)
+    resolved = models.BooleanField(default=False)
     report = models.ForeignKey(Report, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:

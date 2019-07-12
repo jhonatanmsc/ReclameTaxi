@@ -4,14 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from apps.core.models import Reputation, Platform, Driver, Report, Comment, ItemPlatform
-from apps.core.serializers import ReputationSerializer, PlatformSerializer, ReportSerializer, CommentSerializer, \
+from apps.core.models import Platform, Driver, Report, Comment, ItemPlatform
+from apps.core.serializers import PlatformSerializer, ReportSerializer, CommentSerializer, \
     DriverSerializer, ItemPlatformSerializer
-
-
-class ReputationView(viewsets.ReadOnlyModelViewSet):
-    queryset = Reputation.objects.all()
-    serializer_class = ReputationSerializer
 
 
 class PlatformView(viewsets.ModelViewSet):
@@ -51,7 +46,6 @@ class ReportView(viewsets.ModelViewSet):
 
     def create(self, request):
         uid = request.data['uid'] if request.user.is_anonymous else request.user.uid
-        app = ''
         try:
             app = Platform.objects.get(name=request.data['app'].upper())
             driver, driver_created = Driver.objects.get_or_create(

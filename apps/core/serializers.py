@@ -1,15 +1,9 @@
 import pdb
 
+from django.db.models import Q
 from rest_framework import serializers
 
-from apps.core.models import Reputation, Driver, Platform, ItemPlatform, Report, Comment
-
-
-class ReputationSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Reputation
-        fields = '__all__'
+from apps.core.models import Driver, Platform, ItemPlatform, Report, Comment
 
 
 class PlatformSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,6 +15,8 @@ class PlatformSerializer(serializers.HyperlinkedModelSerializer):
 
 class DriverSerializer(serializers.HyperlinkedModelSerializer):
     apps = serializers.SerializerMethodField()
+    reports = serializers.SerializerMethodField()
+    reputation = serializers.SerializerMethodField()
 
     class Meta:
         model = Driver
@@ -34,6 +30,20 @@ class DriverSerializer(serializers.HyperlinkedModelSerializer):
             serialized = PlatformSerializer(app.platform, context={'request': self.context['request']})
             apps.append(serialized.data)
         return apps
+
+    def get_reports(self, instance):
+        return len(instance.reports.all())
+
+    def get_reputain(self, instace):
+        qtd_reports = Report.objects.count()
+        if qtd_reports > 0:
+            reclamations = Report.objects.filter(Q(resolved=True) & Q(driver=instace)).count()
+            if not reclamations:
+                return 0
+            score = reclamations / qtd_reports
+            return score
+
+        return 1
 
 
 class ItemPlatformSerializer(serializers.HyperlinkedModelSerializer):
