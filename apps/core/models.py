@@ -22,6 +22,9 @@ class Driver(models.Model):
         verbose_name = 'Motorista'
         verbose_name_plural = 'Motoristas'
 
+    def __str__(self):
+        return f'{self.name}, placa: {self.placa}'
+
 
 class ItemPlatform(models.Model):
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE, null=True, blank=True, related_name='drivers')
@@ -30,6 +33,9 @@ class ItemPlatform(models.Model):
     class Meta:
         verbose_name = 'aplicativo / motorista'
         verbose_name_plural = 'aplicativo / motorista'
+
+    def __str__(self):
+        return f'{self.driver.name}, app: {self.platform.name}'
 
 
 class Report(models.Model):
@@ -45,6 +51,10 @@ class Report(models.Model):
         verbose_name = 'Reclamação'
         verbose_name_plural = 'Reclamações'
 
+    def __str__(self):
+        resolvido = 'sim' if self.resolved else 'não'
+        return f'uid: {self.uid}, motorista: {self.driver.name}, resolvido: {resolvido}'
+
 
 class Comment(models.Model):
     uid = models.CharField(max_length=255, null=True, blank=True)
@@ -56,3 +66,6 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Comentário'
         verbose_name_plural = 'Comentários'
+
+    def __str__(self):
+        return f'uid: {self.uid}, criado em: {self.created}'
