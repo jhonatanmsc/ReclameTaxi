@@ -57,24 +57,11 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
     name_driver = serializers.CharField(max_length=90, required=False)
     placa = serializers.CharField(max_length=10, required=False)
     app = serializers.CharField(max_length=20, required=False)
-    driver = serializers.SerializerMethodField()
+    driver = DriverSerializer()
 
     class Meta:
         model = Report
         fields = '__all__'
-
-    def get_driver(self, instance):
-        item_apps = instance.driver.apps.all()
-        apps = []
-        for app in item_apps:
-            serialized = PlatformSerializer(app.platform, context={'request': self.context['request']})
-            apps.append(serialized.data)
-        dump_driver = {
-            "name": instance.driver.name,
-            "placa": instance.driver.placa,
-            "apps": apps
-        }
-        return dump_driver
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
