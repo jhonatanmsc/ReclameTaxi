@@ -34,7 +34,7 @@ class DriverSerializer(serializers.HyperlinkedModelSerializer):
     def get_reports(self, instance):
         return len(instance.reports.all())
 
-    def get_reputain(self, instace):
+    def get_reputation(self, instace):
         qtd_reports = Report.objects.count()
         if qtd_reports > 0:
             reclamations = Report.objects.filter(Q(resolved=True) & Q(driver=instace)).count()
